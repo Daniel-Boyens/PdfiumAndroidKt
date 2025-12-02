@@ -730,7 +730,7 @@ class PdfPage(
      */
     override fun close() {
         synchronized(PdfiumCore.lock) {
-            if (handleAlreadyClosed(isClosed || doc.isClosed)) return
+            if (isClosed || doc.isClosed) return // Guard against double-close
 
             pageMap[pageIndex]?.let {
                 if (it.count > 1) {
