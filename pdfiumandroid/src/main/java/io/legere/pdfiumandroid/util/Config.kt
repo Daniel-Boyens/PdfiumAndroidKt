@@ -15,7 +15,7 @@ enum class AlreadyClosedBehavior {
 @Keep
 data class Config(
     val logger: LoggerInterface = DefaultLogger(),
-    val alreadyClosedBehavior: AlreadyClosedBehavior = AlreadyClosedBehavior.EXCEPTION,
+    val alreadyClosedBehavior: AlreadyClosedBehavior = AlreadyClosedBehavior.IGNORE,
 )
 
 fun handleAlreadyClosed(isClosed: Boolean): Boolean {
