@@ -28,6 +28,8 @@ import kotlin.math.min
 fun PdfViewer(
     pageCache: PdfPageKtCache<PdfHolder>,
     pageNum: Int,
+    referenceWidth: Int = 0,
+    referenceHeight: Int = 0,
 ) {
     var surface: Surface? by remember { mutableStateOf(null) }
     var viewWidth by remember { mutableIntStateOf(0) }
@@ -58,6 +60,8 @@ fun PdfViewer(
                     viewHeight,
                     pageCache,
                     pageNum,
+                    referenceWidth,
+                    referenceHeight,
                 )
             }
         }
@@ -71,6 +75,8 @@ suspend fun drawPdf(
     surfaceHeight: Int,
     pageCache: PdfPageKtCache<PdfHolder>,
     currentPage: Int,
+    referenceWidth: Int = 0,
+    referenceHeight: Int = 0,
 ) {
     if (!surface.isValid || surfaceWidth == 0 || surfaceHeight == 0) {
         // Skip rendering if the Surface is not valid or has zero dimensions
@@ -80,11 +86,15 @@ suspend fun drawPdf(
     val pageHolder = pageCache.get(currentPage)
     val pageWidth = pageHolder.pageWidth
     val pageHeight = pageHolder.pageHeight
+    
+    val refW = if (referenceWidth > 0) referenceWidth else pageWidth
+    val refH = if (referenceHeight > 0) referenceHeight else pageHeight
+
     // Calculate scaling factor to fit page within Surface bounds
     val scaleFactor =
         min(
-            surfaceWidth.toFloat() / pageWidth,
-            surfaceHeight.toFloat() / pageHeight,
+            surfaceWidth.toFloat() / refW,
+            surfaceHeight.toFloat() / refH,
         )
 
     val height = (pageHeight * scaleFactor).toInt()

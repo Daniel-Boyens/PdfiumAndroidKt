@@ -91,10 +91,22 @@ class MainViewModel
                                                 }
                                             val pageCount = pdfDocument?.getPageCount() ?: 0
                                             Timber.d("pageCount: $pageCount")
+
+                                            var firstPageWidth = 0
+                                            var firstPageHeight = 0
+                                            if (pageCount > 0) {
+                                                val firstPage = pdfDocument!!.openPage(0)
+                                                firstPageWidth = firstPage.getPageWidthPoint()
+                                                firstPageHeight = firstPage.getPageHeightPoint()
+                                                firstPage.close()
+                                            }
+
                                             emit(
                                                 UiState(
                                                     loadState = LoadStatus.Success,
                                                     pageCount = pageCount,
+                                                    firstPageWidth = firstPageWidth,
+                                                    firstPageHeight = firstPageHeight,
                                                 ),
                                             )
                                         } catch (e: IOException) {
@@ -194,6 +206,8 @@ class MainViewModel
         data class UiState(
             val loadState: LoadStatus = LoadStatus.Init,
             val pageCount: Int = 0,
+            val firstPageWidth: Int = 0,
+            val firstPageHeight: Int = 0,
         )
     }
 

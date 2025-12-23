@@ -169,6 +169,8 @@ fun MyPager(viewModel: MainViewModel) {
                     viewModel = viewModel,
                     componentWidth,
                     componentHeight,
+                    state.value.firstPageWidth,
+                    state.value.firstPageHeight,
                 )
             },
         )
@@ -182,6 +184,8 @@ fun PagerScope(
     viewModel: MainViewModel,
     componentWidth: Int,
     componentHeight: Int,
+    referenceWidth: Int,
+    referenceHeight: Int,
 ) {
     if (componentWidth <= 0 || componentHeight <= 0) {
         return
@@ -190,5 +194,7 @@ fun PagerScope(
     PdfViewer(
         pageCache = viewModel.pageCache,
         pageNum = page,
+        referenceWidth = referenceWidth,
+        referenceHeight = referenceHeight,
     )
 }
